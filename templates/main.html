@@ -7,9 +7,8 @@
 <body>
 	<h1>どこつぶメイン</h1>
 	<p>
-	<c:out value="${loginUser.name}" />
-	<%-- <%= loginUser.getName() %>さん、ログイン中 --%>
-	<a href="/">ログアウト</a>
+	{{name}}さん　ログイン中
+	<a href="/logout">ログアウト</a>
 	</p>
 	<p><a href="/main">更新</a></p>
 	<form action="/main" method="post">
