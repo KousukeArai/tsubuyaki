@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="jp">
+<head>
+    <meta charset="UTF-8">
+    <title>つぶやきアプリ</title>
+</head>
+<body>
+    <h1>新規登録</h1>
+    <form action='/register'>
+        <p>
+            ID:    
+            <input type="text" name="id" required> {{errMsg}}
+        </p>
+        <p>
+            名前:
+            <input type="text" name="name" required>       
+        </p>
+        <p>
+            パスワード:    
+            <input type="text" name="pwd" required>
+        </p>
+        <button type="submit" formmethod="POST">登録</button>
+    </form>
+    <form action='/'>
+        <button type="submit" formmethod="GET">戻る</button>
+    </form>
+</body>
+</html>
