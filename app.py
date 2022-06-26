@@ -51,6 +51,7 @@ def result_post():
   for user in data:
     if user[0] == id:
       if user[2] == pwd:
+        session['user'] = user
         return render_template("main.html", name=user[1])
       else:
         return render_template("index.html", errMsg2 = "パスワードが正しくありません")
@@ -99,6 +100,11 @@ def tweet():
   #
   return render_template("main.html")
 
+@app.route('/logout', methods=['GET'])
+def logout():
+  #セッションの削除
+  session.pop('user', None)
+  return render_template('index.html')
 
 if __name__ == '__main__':
   app.debug = True
