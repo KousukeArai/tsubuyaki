@@ -9,10 +9,10 @@
 <p>
 <c:out value="${loginUser.name}" />
 <%-- <%= loginUser.getName() %>さん、ログイン中 --%>
-<a href="/docoTsubu/Logout">ログアウト</a>
+<a href="/">ログアウト</a>
 </p>
-<p><a href="/docoTsubu/Main">更新</a></p>
-<form action="/docoTsubu/Main" method="post">
+<p><a href="/main">更新</a></p>
+<form action="/main" method="post">
 <input type="text" name="text">
 <input type="submit" value="つぶやく">
 </form>

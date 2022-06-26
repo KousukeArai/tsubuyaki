@@ -12,6 +12,7 @@ def get_db():
 
 
 @app.route('/')
+@app.route('/index', methods=['GET'])
 def index():
   #データベースを開く
   con = get_db()
@@ -82,6 +83,22 @@ def register():
 @app.route('/register', methods=['GET'])
 def move():
   return render_template("register.html")
+
+@app.route('/main', methods=['GET'])
+def update():
+  #
+  #ここに更新時の処理を記述
+  #
+  return render_template("main.html")
+
+
+@app.route('/main', methods=['POST'])
+def tweet():
+  #
+  #つぶやき時の処理を記述
+  #
+  return render_template("main.html")
+
 
 if __name__ == '__main__':
   app.debug = True
