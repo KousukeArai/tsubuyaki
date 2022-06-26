@@ -1,5 +1,6 @@
 import sqlite3
-from flask import Flask, render_template, request, g, session
+
+from flask import Flask, render_template, redirect, request, g, session
 
 app = Flask(__name__)
 app.secret_key="hXDm8NXqqJATH&7XHW6AtM.XEqM4cEMn"
@@ -87,10 +88,16 @@ def move():
 
 @app.route('/main', methods=['GET'])
 def update():
+
+
+  if "user" not in session:
+    return redirect("/")
+  user = session["user"]
+
   #
   #ここに更新時の処理を記述
   #
-  return render_template("main.html")
+  return render_template("main.html", name=user[1])
 
 
 @app.route('/main', methods=['POST'])
@@ -104,7 +111,7 @@ def tweet():
 def logout():
   #セッションの削除
   session.pop('user', None)
-  return render_template('index.html')
+  return redirect('/')
 
 if __name__ == '__main__':
   app.debug = True
