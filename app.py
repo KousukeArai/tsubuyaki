@@ -22,12 +22,12 @@ def index():
   for row in cur:
     if row[0] == 0:
       #テーブル「ユーザー情報」がなければ作成する
-      cur.execute("CREATE TABLE ユーザー情報(ID CHAR(10) PRIMARY KEY, name VARCHAR(40), password VARCHAR(20))")
+      cur.execute("CREATE TABLE ユーザー情報(ID VARCHAR(10) PRIMARY KEY, name VARCHAR(40), password VARCHAR(20))")
       #レコードを作る
       cur.execute(
         """INSERT INTO ユーザー情報(ID, name, password)
-        values(1, '田中太郎', 1234),
-        (2, '大阪花子', 12345)"""
+        values('1', '田中太郎', '1234'),
+        ('2', '大阪花子', '12345')"""
       )
       con.commit()
   
@@ -42,27 +42,27 @@ def index():
 @app.route('/index', methods=['POST'])
 def result_post():
   #テンプレートからログインするIDとpassを取得
-  id = request.form["id"]
-  pwd = request.form["pwd"]
+  id = str(request.form["id"])
+  pwd = str(request.form["pwd"])
+  
   #セッションからデータを取得
   data = session['data']
+
   for user in data:
     if user[0] == id:
       if user[2] == pwd:
         return render_template("main.html", name=user[1])
       else:
         return render_template("index.html", errMsg2 = "パスワードが正しくありません")
-    else:
-      return render_template("index.html", errMsg1 = "IDが正しくありません")
-  return render_template("index.html")
+  return render_template("index.html", errMsg1 = "IDが正しくありません")
 
 
 @app.route('/register', methods=['POST'])
 def register():
   #テンプレートから新規登録するIDと名前とpassを取得
-  id = request.form["id"]
-  name = request.form["name"]
-  pwd = request.form["pwd"]
+  id = str(request.form["id"])
+  name = str(request.form["name"])
+  pwd = str(request.form["pwd"])
 
   data = session['data']
   for user in data:
@@ -73,7 +73,7 @@ def register():
   con = get_db()
  
   #登録処理
-  sql = "INSERT INTO ユーザー情報(ID, name, password) values({}, '{}', {})".format(id, name, pwd)
+  sql = "INSERT INTO ユーザー情報(ID, name, password) values('{}', '{}', '{}')".format(id, name, pwd)
   con.execute(sql)
   con.commit()
 
