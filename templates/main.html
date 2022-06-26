@@ -8,12 +8,12 @@
 	<h1>どこつぶメイン</h1>
 	<p>
 	{{name}}さん　ログイン中
-	<a href="/logout">ログアウト</a>
+	<input type="button" onclick="location.href='/logout' " value="ログアウト">
 	</p>
 	<p><a href="/main">更新</a></p>
 	<form action="/main" method="post">
-	<input type="text" name="text">
-	<input type="submit" value="つぶやく">
+		<input type="text" name="text">
+		<input type="submit" value="つぶやく">
 	</form>
 	<c:if test="${not empty errorMsg}">
 	<p>${errorMsg}</p>
