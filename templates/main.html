@@ -15,18 +15,23 @@
 		<input type="text" name="text">
 		<input type="submit" value="つぶやく">
 	</form>
-	<c:if test="${not empty errorMsg}">
-	<p>${errorMsg}</p>
-	</c:if>
-	<c:forEach var="mutter" items="${mutterList}">
-		<p><c:out value="${mutter.userName}" />:
-		<c:out value="${mutter.text}"/></p>
-	</c:forEach>
-	<%-- <% if(errorMsg != null) { %>
-	<p><%= errorMsg %></p>
-	<% } %>
-	<% for(Mutter mutter : mutterList) { %>
-	<p><%= mutter.getUserName() %>:<%= mutter.getText() %></p>
-	<% } %> --%>
+	<div>
+		<table>
+				<thead>
+						<tr>
+								<th>名前</th>
+								<th>つぶやき</th>
+						</tr>
+				</thead>
+				<tbody>
+						{% for item in tweets %}
+						<tr>
+								<th>{{item[2]}}</th>
+								<th>{{item[3]}}</th>
+						</tr>
+						{% endfor %}
+				</tbody>
+		</table>
+</div> 
 </body>
 </html>
