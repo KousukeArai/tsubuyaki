@@ -17,21 +17,21 @@
 	</form>
 	<div>
 		<table>
-				<thead>
-						<tr>
-								<th>名前</th>
-								<th>つぶやき</th>
-						</tr>
-				</thead>
-				<tbody>
-						{% for item in tweets %}
-						<tr>
-								<th>{{item[2]}}</th>
-								<th>{{item[3]}}</th>
-						</tr>
-						{% endfor %}
-				</tbody>
+			<thead>
+				<tr>
+					<th>名前</th>
+					<th>つぶやき</th>
+				</tr>
+			</thead>
+			<tbody>
+				{% for item in tweets %}
+				<tr>
+					<th>{{item[2]}}</th>
+					<th>{{item[3]}}</th>
+				</tr>
+				{% endfor %}
+			</tbody>
 		</table>
-</div> 
+	</div> 
 </body>
 </html>
