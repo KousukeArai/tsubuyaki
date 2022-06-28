@@ -8,7 +8,7 @@ app.secret_key="hXDm8NXqqJATH&7XHW6AtM.XEqM4cEMn"
 def get_db():
   if 'db' not in g:
     #データベースをオープンしてFlaskのグローバル変数の保存
-    g.db = sqlite3.connect("UserDB.db")
+    g.db = sqlite3.connect("tsubuyakiDB.db")
   return g.db
 
 
@@ -49,11 +49,14 @@ def result_post():
   #セッションからデータを取得
   data = session['data']
 
+  #
+  #データベースから直接探す方法推奨
+  #
   for user in data:
     if user[0] == id:
       if user[2] == pwd:
         session['user'] = user
-        return render_template("main.html", name=user[1])
+        return redirect('/main')
       else:
         return render_template("index.html", errMsg2 = "パスワードが正しくありません")
   return render_template("index.html", errMsg1 = "IDが正しくありません")
@@ -88,24 +91,59 @@ def move():
 
 @app.route('/main', methods=['GET'])
 def update():
-
-
+  #セッションにユーザーが保存されているか確認
   if "user" not in session:
     return redirect("/")
+  
+  #セッションからユーザーの呼び出し
   user = session["user"]
 
-  #
-  #ここに更新時の処理を記述
-  #
-  return render_template("main.html", name=user[1])
+  #データベースを開く
+  con = get_db()
+  #テーブル「つぶやき」の有無を確認
+  cur = con.execute("select count(*) from sqlite_master where TYPE='table' AND name='つぶやき'")
+
+  for row in cur:
+    if row[0] == 0:
+      #テーブル「つぶやき」がなければ作成する
+      cur.execute("CREATE TABLE つぶやき(ID INTEGER PRIMARY KEY AUTOINCREMENT, user_ID VARCHAR(10), name VARCHAR(40), tweet VARCHAR(100))")
+      #レコードを作る
+      cur.execute(
+        """INSERT INTO つぶやき(user_id, name, tweet)
+        values('1', '田中太郎', 'こんにちは'),
+        ('2', '大阪花子', 'はじめまして')"""
+      )
+      con.commit()
+
+  #つぶやきを読み込み
+  cur = con.execute("select * from つぶやき order by ID desc")
+  tweets = cur.fetchall()
+  session['tweets'] = tweets
+  con.close()
+  return render_template("main.html", name=user[1], tweets=tweets)
 
 
 @app.route('/main', methods=['POST'])
 def tweet():
-  #
-  #つぶやき時の処理を記述
-  #
-  return render_template("main.html")
+#テンプレートから新規登録するIDと名前とpassを取得
+  text = str(request.form["text"])
+  if text == "" or len(text) == 0:
+    return redirect("/main")
+  user = session["user"] 
+  #データベースを開く
+  con = get_db()
+ 
+  #登録処理
+  sql = "INSERT INTO つぶやき(user_ID, name, tweet) values('{}', '{}', '{}')".format(user[0], user[1], text)
+  con.execute(sql)
+  con.commit()
+
+  #つぶやきを読み込み
+  cur = con.execute("select * from つぶやき order by ID desc")
+  tweets = cur.fetchall()
+  session['tweets'] = tweets
+  con.close()
+  return render_template("main.html", name=user[1], tweets=tweets)
 
 @app.route('/logout', methods=['GET'])
 def logout():
